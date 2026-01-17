@@ -6,6 +6,7 @@
 //
 
 protocol Userable: Identifiable, Equatable {
+    var id: Int { get }
     var name: String { get }
     var age: Int { get }
 }

@@ -29,14 +29,18 @@ struct ContentView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 List {
-                    Picker(selection: $selectedSortOption) {
-                        ForEach(SortOption.allCases) { sortOption in
-                            Text("\(sortOption.label)")
+                    Section {
+                        Picker(selection: $selectedSortOption) {
+                            ForEach(SortOption.allCases) { sortOption in
+                                Text("\(sortOption.label)")
+                            }
+                        } label: {
+                            Text("Sort Option")
                         }
-                    } label: {
-                        Text("Sort Option")
                     }
-                    DataTableView(items: sortedUsers)
+                    Section {
+                        DataTableView(items: sortedUsers)
+                    }
                 }
                 .animation(.default, value: sortedUsers)
             }

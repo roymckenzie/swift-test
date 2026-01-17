@@ -6,7 +6,7 @@
 //
 
 enum SortOption: String, CaseIterable, Identifiable {
-    case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Random
+    case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Random, Created
     var id: Self { self }
     
     var label: String {
@@ -18,6 +18,7 @@ enum SortOption: String, CaseIterable, Identifiable {
         case .OldestFirst: return "Oldest First"
         case .YoungestFirst: return "Youngest First"
         case .Random: return "Random"
+        case .Created: return "Created"
         }
     }
     
@@ -29,7 +30,8 @@ enum SortOption: String, CaseIterable, Identifiable {
         case .LastZA: return { $0.name.split(separator: " ")[1] > $1.name.split(separator: " ")[1] }
         case .OldestFirst: return { $0.age > $1.age }
         case .YoungestFirst: return { $0.age < $1.age }
-        case .Random: return { $0.age > $1.age }
+        case .Random: return { $0.id > $1.id }
+        case .Created: return { $0.id < $1.id }
         }
     }
 }
