@@ -5,7 +5,7 @@
 //  Created by Roy McKenzie on 1/17/26.
 //
 
-enum SortOption<T: Userable>: String, CaseIterable, Identifiable {
+enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable {
     case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Random, Created
     var id: Self { self }
     

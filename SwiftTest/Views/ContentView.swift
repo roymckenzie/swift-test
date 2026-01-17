@@ -16,7 +16,7 @@ struct ContentView: View {
         Person(id: 4, name: "James Bond", age: 36)
     ]
     
-    @State private var selectedSortOption: SortOption<Person> = .FirstAZ
+    @State private var selectedSortOption: UserSortOption<Person> = .FirstAZ
     
     private var sortedUsers: [Person] {
         if selectedSortOption == .Random {
@@ -31,7 +31,7 @@ struct ContentView: View {
                 List {
                     Section {
                         Picker(selection: $selectedSortOption) {
-                            ForEach(SortOption<Person>.allCases) { sortOption in
+                            ForEach(UserSortOption<Person>.allCases) { sortOption in
                                 Text("\(sortOption.label)")
                             }
                         } label: {
