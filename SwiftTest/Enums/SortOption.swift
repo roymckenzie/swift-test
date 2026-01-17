@@ -5,7 +5,7 @@
 //  Created by Roy McKenzie on 1/17/26.
 //
 
-enum SortOption: String, CaseIterable, Identifiable {
+enum SortOption<T: Userable>: String, CaseIterable, Identifiable {
     case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Random, Created
     var id: Self { self }
     
@@ -22,7 +22,7 @@ enum SortOption: String, CaseIterable, Identifiable {
         }
     }
     
-    var sortingFunction: (any Userable, any Userable) -> Bool {
+    var sortingFunction: (T, T) -> Bool {
         switch self {
         case .FirstAZ: return { $0.name < $1.name }
         case .FirstZA: return { $0.name > $1.name }
