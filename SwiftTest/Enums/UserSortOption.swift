@@ -8,7 +8,7 @@
 import Foundation
 
 enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable {
-    case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Random, Created
+    case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Created, Random
     var id: Self { self }
     
     var label: String {
@@ -26,10 +26,30 @@ enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable {
     
     var sortingFunction: (T, T) -> Bool {
         switch self {
-        case .FirstAZ: return { firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedAscending }
-        case .FirstZA: return { firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedDescending }
-        case .LastAZ: return { lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedAscending }
-        case .LastZA: return { lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedDescending }
+        case .FirstAZ: return {
+            if (firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedSame) {
+                return lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedAscending
+            }
+            return firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedAscending
+        }
+        case .FirstZA: return {
+            if (firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedSame) {
+                return lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedDescending
+            }
+            return firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedDescending
+        }
+        case .LastAZ: return {
+            if (lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedSame) {
+                return firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedAscending
+            }
+            return lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedAscending
+        }
+        case .LastZA: return {
+            if (lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedSame) {
+                return firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedDescending
+            }
+            return lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedDescending
+        }
         case .OldestFirst: return { $0.age > $1.age }
         case .YoungestFirst: return { $0.age < $1.age }
         case .Created: return { $0.id < $1.id }
