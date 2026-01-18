@@ -32,7 +32,7 @@ struct ContentView: View {
                     Section {
                         Picker(selection: $selectedSortOption) {
                             ForEach(UserSortOption<Person>.allCases) { sortOption in
-                                Text("\(sortOption.label)")
+                                Text(sortOption.label)
                             }
                         } label: {
                             Text("Sort Option")

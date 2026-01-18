@@ -5,6 +5,8 @@
 //  Created by Roy McKenzie on 1/17/26.
 //
 
+import Foundation
+
 enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable {
     case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Random, Created
     var id: Self { self }
@@ -17,21 +19,29 @@ enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable {
         case .LastZA: return "Last Name Z-A"
         case .OldestFirst: return "Oldest First"
         case .YoungestFirst: return "Youngest First"
-        case .Random: return "Random"
         case .Created: return "Created"
+        case .Random: return "Random"
         }
     }
     
     var sortingFunction: (T, T) -> Bool {
         switch self {
-        case .FirstAZ: return { $0.name < $1.name }
-        case .FirstZA: return { $0.name > $1.name }
-        case .LastAZ: return { $0.name.split(separator: " ")[1] < $1.name.split(separator: " ")[1] }
-        case .LastZA: return { $0.name.split(separator: " ")[1] > $1.name.split(separator: " ")[1] }
+        case .FirstAZ: return { firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedAscending }
+        case .FirstZA: return { firstName($0).localizedCaseInsensitiveCompare(firstName($1)) == .orderedDescending }
+        case .LastAZ: return { lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedAscending }
+        case .LastZA: return { lastName($0).localizedCaseInsensitiveCompare(lastName($1)) == .orderedDescending }
         case .OldestFirst: return { $0.age > $1.age }
         case .YoungestFirst: return { $0.age < $1.age }
-        case .Random: return { $0.id > $1.id }
         case .Created: return { $0.id < $1.id }
+        case .Random: return { _, _ in false }
         }
+    }
+    
+    private func firstName(_ user: T) -> String {
+        user.name.split(separator: " ").first.map(String.init) ?? ""
+    }
+    
+    private func lastName(_ user: T) -> String {
+        user.name.split(separator: " ").last.map(String.init) ?? ""
     }
 }
