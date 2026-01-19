@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  PeopleView.swift
 //  Test
 //
 //  Created by Roy McKenzie on 1/16/26.
@@ -7,23 +7,16 @@
 
 import SwiftUI
 
-struct ContentView: View {
-            
-    private var users: [Person] = [
-        Person(id: 1, name: "Roy McKenzie", age: 43),
-        Person(id: 2, name: "Frank L Baum", age: 40),
-        Person(id: 3, name: "Sam Altman", age: 46),
-        Person(id: 4, name: "James Bond", age: 36),
-        Person(id: 5, name: "Albert J Baum", age: 65),
-    ]
-    
+struct PeopleView: View {
+    @EnvironmentObject var peopleManager: PeopleManager
+    @State private var isPresentingAddNew = false
     @State private var selectedSortOption: UserSortOption<Person> = .FirstAZ
     
     private var sortedUsers: [Person] {
         if selectedSortOption == .Random {
-            return users.shuffled()
+            return peopleManager.people.shuffled()
         }
-        return users.sorted(by: selectedSortOption.sortingFunction)
+        return peopleManager.people.sorted(by: selectedSortOption.sortingFunction)
     }
     
     var body: some View {
@@ -39,11 +32,17 @@ struct ContentView: View {
                             Text("Sort Option")
                         }
                     }
-                    Section {
-                        DataTableView(items: sortedUsers)
+                    Section("People") {
+                        PersonTableView(items: sortedUsers)
+                    }
+                    Button("Add New") {
+                        isPresentingAddNew = true
                     }
                 }
                 .animation(.default, value: sortedUsers)
+            }
+            .sheet(isPresented: $isPresentingAddNew) {
+                AddPersonView()
             }
             .navigationTitle("People")
         }
@@ -51,5 +50,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    let peopleManager = PeopleManager()
+    return PeopleView()
+        .environmentObject(peopleManager)
 }

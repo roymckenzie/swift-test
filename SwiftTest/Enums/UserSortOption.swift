@@ -1,5 +1,5 @@
 //
-//  SortOption.swift
+//  UserSortOption.swift
 //  SwiftTest
 //
 //  Created by Roy McKenzie on 1/17/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable {
+enum UserSortOption<T: Userable>: String, CaseIterable, Identifiable, Hashable {
     case FirstAZ, FirstZA, LastAZ, LastZA, OldestFirst, YoungestFirst, Created, Random
     var id: Self { self }
     

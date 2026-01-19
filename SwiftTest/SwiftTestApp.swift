@@ -9,9 +9,21 @@ import SwiftUI
 
 @main
 struct SwiftTestApp: App {
+    @StateObject private var peopleManager = PeopleManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                PeopleView()
+                    .environmentObject(peopleManager)
+                    .tabItem {
+                        Label("People", systemImage: "person.3.sequence")
+                    }
+                SettingsView()
+                    .tabItem {
+                        Label("Settings", systemImage: "gearshape")
+                    }
+            }
         }
     }
 }
