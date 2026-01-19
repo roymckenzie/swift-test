@@ -12,6 +12,8 @@ struct PeopleView: View {
     @State private var isPresentingAddNew = false
     @State private var selectedSortOption: UserSortOption<Person> = .FirstAZ
     
+    @State private var isLoadingMore = false
+    
     private var sortedUsers: [Person] {
         if selectedSortOption == .Random {
             return peopleManager.people.shuffled()
@@ -35,8 +37,27 @@ struct PeopleView: View {
                     Section("People") {
                         PersonTableView(items: sortedUsers)
                     }
-                    Button("Add New") {
-                        isPresentingAddNew = true
+                    Section {
+                        Button("Add New") {
+                            isPresentingAddNew = true
+                        }
+                    }
+                    Button {
+                        Task {
+                            isLoadingMore = true
+                            await peopleManager.loadMore()
+                            isLoadingMore = false
+                        }
+                    } label: {
+                        if isLoadingMore {
+                            HStack {
+                                Text("Loading")
+                                Spacer()
+                                ProgressView()
+                            }
+                        } else {
+                            Text("Load More")
+                        }
                     }
                 }
                 .animation(.default, value: sortedUsers)

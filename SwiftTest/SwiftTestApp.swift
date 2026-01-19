@@ -20,6 +20,7 @@ struct SwiftTestApp: App {
                         Label("People", systemImage: "person.3.sequence")
                     }
                 SettingsView()
+                    .environmentObject(peopleManager)
                     .tabItem {
                         Label("Settings", systemImage: "gearshape")
                     }

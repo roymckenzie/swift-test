@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct PersonView: View {
     @EnvironmentObject private var peopleManager: PeopleManager
     @Environment(\.dismiss) private var dismiss
     @State private var isPresentingConfirm: Bool = false
+    @State private var didCopyID: Bool = false
     private var person: Person
     
     init(for person: Person) {
@@ -26,10 +28,18 @@ struct PersonView: View {
                 LabeledContent("Age") {
                     Text("\(person.age)")
                 }
+                LabeledContent("Sex") {
+                    Text("\(person.sex.rawValue.capitalized)")
+                        .frame(alignment: .trailing)
+                }
                 LabeledContent("ID") {
-                    Text("\(person.id)")
+                    Text(String(person.id))
                         .lineLimit(1)
                         .frame(maxWidth: 200)
+                        .onTapGesture {
+                            UIPasteboard.general.string = "\(person.id)"
+                            didCopyID = true
+                        }
                 }
             }
             Button("Delete", role: .destructive) {
@@ -48,6 +58,10 @@ struct PersonView: View {
                 }
             }
         }
+        .alert("Copied", isPresented: $didCopyID) {
+            } message: {
+                Text("Person ID copied to clipboard")
+            }
         .navigationTitle("Person")
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Userable: Identifiable, Equatable {
-    var id: UUID { get }
+    var id: UInt { get }
     var name: String { get }
     var age: Int { get }
 }
